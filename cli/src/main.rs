@@ -281,7 +281,6 @@ fn main() -> anyhow::Result<()> {
                     .help("Mint for token to claim"),
                 Arg::with_name("private_key")
                     .long("private-key")
-                    .validator(is_pubkey)
                     .value_name("ETHEREUM_PRIVATE_KEY")
                     .takes_value(true)
                     .required(true)
