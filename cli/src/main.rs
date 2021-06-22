@@ -138,7 +138,7 @@ fn transfer(
     Ok(())
 }
 
-fn sent_to(config: Config, eth_address: [u8; 20], mint: Pubkey, amount: f64) -> anyhow::Result<()> {
+fn send_to(config: Config, eth_address: [u8; 20], mint: Pubkey, amount: f64) -> anyhow::Result<()> {
     let mut instructions = vec![];
 
     let pair = get_address_pair(&mint, eth_address)?;
@@ -253,7 +253,7 @@ fn main() -> anyhow::Result<()> {
         )
         .arg(fee_payer_arg().global(true))
         .subcommands(vec![
-            SubCommand::with_name("sent-to") 
+            SubCommand::with_name("send-to") 
                 .args(&[
                     Arg::with_name("recipient")
                         .value_name("ETHEREUM_ADDRESS")
@@ -366,7 +366,7 @@ fn main() -> anyhow::Result<()> {
             transfer(config, privkey, mint, recipient, amount)
                 .context("Failed to execute `transfer` command")?
         }
-        ("sent-to", Some(args)) => {
+        ("send-to", Some(args)) => {
             let (eth_address, mint, amount) = (|| -> anyhow::Result<_> {
                 let eth_address = eth_address_of(args, "recipient")?;
                 let mint = pubkey_of(args, "mint").unwrap();
@@ -374,10 +374,10 @@ fn main() -> anyhow::Result<()> {
 
                 Ok((eth_address, mint, amount))
             })()
-            .context("Preparing parameters for execution command `sent to`")?;
+            .context("Preparing parameters for execution command `send to`")?;
 
-            sent_to(config, eth_address, mint, amount)
-                .context("Failed to execute `send to` coomand")?
+            send_to(config, eth_address, mint, amount)
+                .context("Failed to execute `send to` command")?
         }
         ("balance", Some(args)) => {
             let (eth_address, mint) = (|| -> anyhow::Result<_> {
